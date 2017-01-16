@@ -1,19 +1,35 @@
-# Portal
+# PortalElixir
 
-**TODO: Add description**
+Implemented Portal-like behaviour in Elixir by tutorial authored by José Valim on [How I start?](http://howistart.org/posts/elixir/1) website.
 
-## Installation
+## Summary
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `portal` to your list of dependencies in `mix.exs`:
+It's simple implementation of Portal-like objects, which can send data to each other. Additionaly there is a Supervisor which will restart terminated portals to make sure data can be translated (but with data loss).
+
+## Usage
 
 ```elixir
-def deps do
-  [{:portal, "~> 0.1.0"}]
-end
+
+iex> Portal.shoot(:orange)
+{:ok, #PID<0.72.0>}
+iex> Portal.shoot(:blue)
+{:ok, #PID<0.74.0>}
+iex> portal = Portal.transfer(:orange, :blue, [1, 2, 3, 4])
+#Portal<
+       :orange <=> :blue
+  [1, 2, 3, 4] <=> []
+>
+
+iex> Portal.push_right(portal)
+#Portal<
+    :orange <=> :blue
+  [1, 2, 3] <=> [4]
+>
+
+
+iex> Portal.push_left(portal)
+#Portal<
+    :orange <=> :blue
+  [1, 2, 3, 4] <=> []
+>
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/portal](https://hexdocs.pm/portal).
-
