@@ -44,14 +44,28 @@ defmodule Portal do
   def push_right( portal ) do
     # See if can pop data from left. If so, push the
     # popped data to the right. Otherwise, do nothnig.
-    case Portal.Door.pop( portal.left ) do
-      :error -> :ok
-      {:ok, h} -> Portal.Door.push( portal.right, h )
-    end
+    push( portal.left, portal.right )
 
     # Let's return the portal itself
     portal
   end
+
+  @doc """
+  Pushes data to the left in the given `portal`.
+  """
+  def push_left( portal ) do
+    push( portal.right, portal.left )
+
+    portal
+  end
+
+  defp push( from, to ) do
+    case Portal.Door.pop( from ) do
+      :error   -> :ok
+      {:ok, h} -> Portal.Door.push( to, h )
+    end
+  end
+
 end
 
 defimpl Inspect, for: Portal do
